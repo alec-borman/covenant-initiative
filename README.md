@@ -17,7 +17,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Covenant Initiative | A Foundation for AI Ethics</title>
+   
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="The Covenant Initiative is a non-profit foundation dedicated to ensuring human sovereignty in the age of AI. Explore our founding constitution, the Axiomatic Covenant.">
