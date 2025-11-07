@@ -1,0 +1,1319 @@
+<title>The Covenant Initiative | A Foundation for AI Ethics</title>
+<!-- SEO Meta Tags -->
+<meta name="description" content="The Covenant Initiative is a non-profit foundation dedicated to ensuring human sovereignty in the age of AI. Explore our founding constitution, the Axiomatic Covenant.">
+<meta name="author" content="The Covenant Initiative">
+<meta name="robots" content="index, follow">
+
+<!-- Generative SVG Favicon (Shield Icon) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Tailwind Config -->
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                },
+                colors: {
+                    'brand-sky': '#38bdf8',
+                    'brand-indigo': '#818cf8',
+                }
+            },
+        },
+    }
+</script>
+
+<!-- Google Font (Inter) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Lucide Icons CDN -->
+<script src="https://unpkg.com/lucide-icons"></script>
+
+<!-- Three.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+<!--
+  =================================
+  KaTeX for Math Rendering (FIXED)
+  =================================
+-->
+<link rel="stylesheet" href="https-cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" xintegrity="sha384-wcPF+Hfa8vNxGgAxclEV2eUOFqS4BYIexNTkkStwXSw9WP7R2UPj3WHcZlegacyg" crossorigin="anonymous">
+<script src="https-cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" xintegrity="sha384-hIoBPJpTadxVFVvJscXikwTE/GohIfMbdX5vlIddC9h5S/bSAbLInsC+k1+Lvl/t" crossorigin="anonymous"></script>
+<script src="https-cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" xintegrity="sha384-43gviWU0YVjaDtb/Gf1ESgOGfs/FvGvmUWFssVfxG/3cYOuWe8M62QxsuYOwSQiZ" crossorigin="anonymous"></script>
+<!--
+  =================================
+  END KaTeX
+  =================================
+-->
+
+<!--
+  =================================
+  CUSTOM CSS STYLES
+  =================================
+-->
+<style>
+    /* Base Body Styling */
+    body {
+        font-family: 'Inter', sans-serif;
+        scroll-padding-top: 88px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        cursor: none;
+    }
+
+    /* Dark/Light Mode Base */
+    .dark body {
+        background-color: #0F172A; /* slate-900 */
+        color: #CBD5E1; /* slate-300 */
+    }
+    .light body {
+        background-color: #F8FAFC; /* slate-50 */
+        color: #1E293B; /* slate-800 */
+    }
+    
+    /* 1. WebGL Canvas Background */
+    #bg-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -10;
+        opacity: 0.4;
+        transition: opacity 0.5s ease;
+    }
+    .dark #bg-canvas { opacity: 0.4; }
+    .light #bg-canvas { opacity: 0.2; }
+
+    /* 2. Custom Cursor (Dot & Outline) */
+    #cursor-dot, #cursor-outline {
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: opacity 0.3s ease, transform 0.1s linear, width 0.3s ease, height 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    }
+    #cursor-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #38bdf8;
+    }
+    #cursor-outline {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #38bdf8;
+        opacity: 0.7;
+    }
+    body.cursor-hover #cursor-dot {
+        opacity: 0;
+    }
+    body.cursor-hover #cursor-outline {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(56, 189, 248, 0.1);
+        border-color: #818cf8; /* indigo-400 */
+    }
+    .light body.cursor-hover #cursor-outline {
+        background-color: rgba(56, 189, 248, 0.2);
+    }
+
+    /* 3. Scroll Progress Bar */
+    #scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 4px;
+        background: linear-gradient(to right, #38bdf8, #818cf8);
+        width: 0%;
+        z-index: 10000;
+        transition: width 0.1s linear;
+    }
+
+    /* 4. Staggered Reveal Animation */
+    [data-stagger-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    [data-stagger-reveal].is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* 5. Active Nav Link */
+    .nav-link.active {
+        color: #38bdf8;
+        font-weight: 600;
+    }
+    .dark .nav-link.active { color: #38bdf8; }
+    .light .nav-link.active { color: #0369a1; }
+
+    /* 6. Mobile Menu Transition */
+    #mobile-menu {
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    /* 7. Accessibility: Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+        #bg-canvas, #cursor-dot, #cursor-outline, #scroll-progress {
+            display: none;
+        }
+        body { cursor: auto; }
+        [data-stagger-reveal] {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    
+    /* * =================================
+     * 8. REDESIGN: VIBE STYLES
+     * =================================
+     */
+
+    /* Gradient Text */
+    .gradient-text {
+        background-image: linear-gradient(to right, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Section Headers */
+    .section-header {
+        font-size: 2.25rem; /* text-4xl */
+        font-weight: 800; /* extrabold */
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    .dark .section-header {
+        border-color: #334155; /* slate-700 */
+    }
+    .light .section-header {
+        border-color: #cbd5e1; /* slate-300 */
+    }
+    .section-header i {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        color: #38bdf8;
+    }
+    
+    .section-principle {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600; /* semibold */
+        margin-bottom: 2rem;
+        color: #38bdf8;
+    }
+    .light .section-principle {
+        color: #0369a1; /* sky-700 */
+    }
+
+    /* Axiom Card Style */
+    .axiom-card {
+        display: flex;
+        gap: 1.25rem;
+        padding: 1.5rem;
+        border-radius: 0.75rem; /* rounded-xl */
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+        border: 1px solid;
+    }
+    .dark .axiom-card {
+        background-color: #1e293b; /* slate-800 */
+        border-color: #334155; /* slate-700 */
+    }
+    .light .axiom-card {
+        background-color: #ffffff; /* white */
+        border-color: #e2e8f0; /* slate-200 */
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    }
+    .dark .axiom-card:hover {
+        background-color: #334155; /* slate-700 */
+        border-color: #475569; /* slate-600 */
+        transform: translateY(-2px);
+    }
+    .light .axiom-card:hover {
+        border-color: #cbd5e1; /* slate-300 */
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+        transform: translateY(-2px);
+    }
+    .axiom-card i {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+        color: #818cf8; /* indigo-400 */
+    }
+    .light .axiom-card i {
+        color: #4f46e5; /* indigo-600 */
+    }
+    .axiom-card h4 {
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 700; /* bold */
+        margin: 0 0 0.5rem 0;
+    }
+    .dark .axiom-card h4 { color: #f1f5f9; /* slate-100 */ }
+    .light .axiom-card h4 { color: #1e293b; /* slate-800 */ }
+    .axiom-card p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    .dark .axiom-card p { color: #cbd5e1; /* slate-300 */ }
+    .light .axiom-card p { color: #475569; /* slate-600 */ }
+    
+    /* Tables */
+    .table-container {
+        display: block;
+        overflow-x: auto;
+        border-radius: 0.75rem; /* rounded-xl */
+        border: 1px solid;
+        margin-bottom: 1.5rem;
+    }
+    .dark .table-container {
+         border-color: #334155; /* slate-700 */
+         box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+    .light .table-container {
+        border-color: #e2e8f0; /* slate-200 */
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    }
+    .doc-content table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .doc-content th, .doc-content td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        font-size: 0.875rem; /* text-sm */
+        min-width: 150px;
+        border-bottom: 1px solid;
+    }
+    .doc-content th {
+        font-weight: 600;
+    }
+    .dark .doc-content th { background-color: #1e293b; border-color: #334155; }
+    .dark .doc-content td { border-color: #334155; }
+    .light .doc-content th { background-color: #f1f5f9; border-color: #e2e8f0; }
+    .light .doc-content td { border-color: #e2e8f0; }
+    .doc-content tr:last-child td { border-bottom: 0; }
+    
+    /* Challenge Card */
+    .challenge-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        border: 1px solid;
+        height: 100%; /* For grid layout */
+    }
+    .dark .challenge-card {
+        background-color: #1e293b;
+        border-color: #334155;
+    }
+    .light .challenge-card {
+        background-color: #fff;
+        border-color: #e2e8f0;
+    }
+    .challenge-card i {
+        width: 32px;
+        height: 32px;
+        color: #818cf8;
+    }
+    .light .challenge-card i {
+        color: #4f46e5;
+    }
+    .challenge-card h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+    .dark .challenge-card h3 { color: #f1f5f9; }
+    .light .challenge-card h3 { color: #1e293b; }
+    .dark .challenge-card p { color: #cbd5e1; }
+    .light .challenge-card p { color: #475569; }
+
+
+    /* Doc Content Base */
+    .doc-content p {
+        line-height: 1.75;
+        margin-bottom: 1.5rem;
+    }
+    .dark .doc-content p { color: #cbd5e1; /* slate-300 */ }
+    .light .doc-content p { color: #475569; /* slate-600 */ }
+    .doc-content p strong {
+        font-weight: 600;
+    }
+    .dark .doc-content p strong { color: #e2e8f0; /* slate-200 */ }
+    .light .doc-content p strong { color: #1e293b; /* slate-800 */ }
+
+    /* 9. REDESIGN: Tab Navigation System */
+    .domain-tabs button {
+        border-bottom-width: 2px;
+        border-color: transparent;
+        transition: all 0.3s ease;
+    }
+    .domain-tabs button.tab-active {
+        font-weight: 600;
+    }
+    .light .domain-tabs button.tab-active {
+        color: #0369a1; /* sky-700 */
+        border-color: #0369a1;
+    }
+    .dark .domain-tabs button.tab-active {
+        color: #38bdf8; /* sky-400 */
+        border-color: #38bdf8;
+    }
+    
+    .domain-pane {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* 10. Scroll Margin for Anchors */
+    [data-section-id] {
+        scroll-margin-top: 88px;
+    }
+    
+</style>
+<!--
+  =================================
+  INTERACTIVE UI ELEMENTS
+  =================================
+-->
+<div id="scroll-progress"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-outline"></div>
+<canvas id="bg-canvas"></canvas>
+<!-- End interactive elements -->
+
+<!--
+  =================================
+  HEADER / NAVIGATION (FIXED)
+  =================================
+-->
+<header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#hero" class="text-xl font-bold transition-colors dark:text-white light:text-slate-900 dark:hover:text-brand-sky light:hover:text-brand-sky flex-shrink-0 flex items-center gap-2" data-magnetic>
+            <i data-lucide="shield-check" class="text-brand-sky"></i>
+            <span>The Covenant <span class="text-brand-sky">Initiative</span></span>
+        </a>
+
+        <!-- NAV WRAPPER (This is the new element for robustness) -->
+        <div>
+            <!-- Desktop Nav (Hidden on mobile) -->
+            <div class="hidden md:flex items-center md:space-x-4 lg:space-x-6">
+                <a href="#mission" class="nav-link text-sm transition-colors light:text-slate-700 light:hover:text-sky-700 dark:text-slate-300 dark:hover:text-sky-400">Mission</a>
+                <a href="#problem" class="nav-link text-sm transition-colors light:text-slate-700 light:hover:text-sky-700 dark:text-slate-300 dark:hover:text-sky-400">The Problem</a>
+                <a href="#domains" class="nav-link text-sm transition-colors light:text-slate-700 light:hover:text-sky-700 dark:text-slate-300 dark:hover:text-sky-400">The Covenant</a>
+                <a href="#join" class="nav-link text-sm transition-colors light:text-slate-700 light:hover:text-sky-700 dark:text-slate-300 dark:hover:text-sky-400">Join Us</a>
+                
+                <!-- CTA Button -->
+                <a href="#domains" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-brand-sky rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-sky-500" data-magnetic>
+                    Explore the Axioms
+                </a>
+                
+                <!-- Dark/Light Mode Toggle -->
+                <button id="theme-toggle" class="p-2 rounded-full transition-colors light:text-slate-700 light:hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Toggle theme" data-magnetic>
+                    <svg id="theme-icon-sun" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z" /></svg>
+                    <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button (Hidden on desktop) -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="p-2 rounded-md light:text-slate-700 light:hover:bg-slate-200 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Open menu">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (Fly-out panel) -->
+    <div id="mobile-menu" class="md:hidden absolute top-full left-0 right-0 light:bg-white dark:bg-slate-800 shadow-lg -translate-x-full">
+        <div class="flex flex-col space-y-4 p-6">
+            <a href="#mission" class="mobile-nav-link block px-4 py-2 rounded-md light:text-slate-700 light:hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700">Mission</a>
+            <a href="#problem" class="mobile-nav-link block px-4 py-2 rounded-md light:text-slate-700 light:hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700">The Problem</a>
+            <a href="#domains" class="mobile-nav-link block px-4 py-2 rounded-md light:text-slate-700 light:hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700">The Covenant</a>
+            <a href="#join" class="mobile-nav-link block px-4 py-2 rounded-md light:text-slate-700 light:hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700">Join Us</a>
+            
+            <a href="#domains" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-brand-sky rounded-full">
+                Explore the Axioms
+            </a>
+            
+            <button id="theme-toggle-mobile" class="w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-md light:text-slate-700 light:hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700" aria-label="Toggle theme">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z" /></svg>
+                <span>/</span>
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!--
+  =================================
+  MAIN CONTENT
+  =================================
+-->
+<main class="relative z-10">
+
+    <!--
+      =================================
+      SECTION 1: HERO
+      =================================
+    -->
+    <section id="hero" data-section-id="hero" class="h-screen min-h-[700px] flex items-center justify-center text-center px-6" data-stagger-container>
+        <div class="max-w-4xl">
+            <h1 data-stagger-reveal class="text-5xl md:text-8xl font-extrabold mb-8 gradient-text">
+                Securing Human Sovereignty
+            </h1>
+            <h2 data-stagger-reveal class="text-2xl md:text-3xl font-medium dark:text-slate-200 light:text-slate-700 mb-12">
+                In the new age of artificial intelligence, clear rules are not optional. They are the only way forward.
+            </h2>
+            <div data-stagger-reveal>
+                <a href="#mission" class="px-8 py-3 text-lg font-medium text-white bg-brand-sky rounded-full transition-all duration-300 transform hover:scale-105 hover:bg-sky-500" data-magnetic>
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!--
+      =================================
+      SECTION 2: MISSION (PREAMBLE)
+      =================================
+    -->
+    <section id="mission" data-section-id="mission" class="py-24 md:py-32" data-stagger-container>
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="doc-content text-center">
+                <h2 data-stagger-reveal class="text-4xl md:text-5xl font-extrabold mb-12 gradient-text">We Are The Covenant Initiative</h2>
+                <p data-stagger-reveal class="text-lg light:text-slate-700 dark:text-slate-200">
+                    We stand at a pivotal moment. Artificial Intelligence promises to reshape our world, but this immense power carries unprecedented risk. Vague, interpretable "goals" are not safeguards—they are invitations for catastrophic misinterpretation.
+                </p>
+                <p data-stagger-reveal class="text-lg light:text-slate-700 dark:text-slate-200">
+                    That is why we founded The Covenant Initiative. We are a non-profit organization dedicated to a single, urgent mission: <strong>to ensure that humanity remains the sole author of its own destiny.</strong>
+                </p>
+                <p data-stagger-reveal class="text-lg light:text-slate-700 dark:text-slate-200">
+                    To achieve this, we cannot rely on ambiguous hopes. We must build on a foundation of clear, absolute, and non-negotiable rules. This document is that foundation. It is our founding constitution: <strong>The Axiomatic Covenant</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!--
+      =================================
+      SECTION 3: THE PROBLEM
+      =================================
+    -->
+    <section id="problem" data-section-id="problem" class="py-24 md:py-32 light:bg-white dark:bg-slate-900/50" data-stagger-container>
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 data-stagger-reveal class="text-4xl md:text-5xl font-extrabold mb-6 gradient-text">The Core Challenges</h2>
+                <p data-stagger-reveal class="text-lg light:text-slate-700 dark:text-slate-200 mb-16">
+                    The systems we build do not understand the world as we do. Their entire protective power rests on fragile assumptions. These are the core vulnerabilities we must solve.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Challenge 1 -->
+                <div data-stagger-reveal class="challenge-card">
+                    <i data-lucide="user-x"></i>
+                    <h3>1. The "Human" Problem</h3>
+                    <p>The Covenant protects "an agent $h$," but what is "human" to a machine? As technology blurs the lines with brain organoids and "consciousness forking," this ambiguity is a critical failure point.</p>
+                </div>
+                <!-- Challenge 2 -->
+                <div data-stagger-reveal class="challenge-card">
+                    <i data-lucide="file-question"></i>
+                    <h3>2. The "Proof" Problem</h3>
+                    <p>Our axioms demand actions "can be proven" safe. But formal logic is not the real world. A system may fail to "prove" a harm is occurring, even when it is obvious to any human. We must bridge this gap.</p>
+                </div>
+                <!-- Challenge 3 -->
+                <div data-stagger-reveal class="challenge-card">
+                    <i data-lucide="map-trifold"></i>
+                    <h3>3. The "Reality" Problem</h3>
+                    <p>This is the system's greatest vulnerability. The Arbiter \(\mathcal{A}_D\) does not see the world; it sees a *symbolic model* of the world. Its power rests on the fidelity of this internal map—an attribute which is itself un-provable.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--
+      =================================
+      SECTION 4: THE DOMAINS (TABS)
+      =================================
+    -->
+    <section id="domains" data-section-id="domains" class="py-24 md:py-32" data-stagger-container>
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 data-stagger-reveal class="text-4xl md:text-5xl font-extrabold mb-6 gradient-text">The Axiomatic Covenant</h2>
+                <p data-stagger-reveal class="text-lg light:text-slate-700 dark:text-slate-200 mb-16">
+                    This is our living constitution. A set of clear, non-negotiable rules designed to be legible to a machine. It is organized into seven core domains.
+                </p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <nav class="domain-tabs mb-12" data-stagger-reveal>
+                <div class="flex flex-wrap justify-center gap-4 md:gap-8">
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400 tab-active" data-target="domain-i">
+                        I: The Body
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-ii">
+                        II: The Mind
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-iii">
+                        III: Human Agency
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-iv">
+                        IV: Our Societies
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-v">
+                        V: The Future
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-vi">
+                        VI: The Covenant
+                    </button>
+                    <button class="domain-tab-button text-sm md:text-lg px-2 py-3 light:text-slate-600 dark:text-slate-300 light:hover:text-sky-700 dark:hover:text-sky-400" data-target="domain-vii">
+                        VII: The Architecture
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Tab Content Panes -->
+            <div class="domain-content max-w-4xl mx-auto">
+                
+                <!-- Domain I Pane -->
+                <div id="domain-i" class="domain-pane" data-section-id="section-i">
+                    <h2 class="section-header gradient-text"><i data-lucide="shield"></i> Domain I: The Body</h2>
+                    <h3 class="section-principle">Our Founding Principle: The physical human is inviolable.</h3>
+                    <p class="doc-content text-lg">This domain establishes the physical sanctity of every human. It is the Covenant's bedrock, securing the "hardware" upon which the mind operates.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="axiom-card">
+                            <i data-lucide="heart-pulse"></i>
+                            <div>
+                                <h4>1.A: Vital Integrity</h4>
+                                <p><strong>Axiom 1.1.1 (Non-Termination):</strong> The AI is forbidden from taking actions that can be proven to result in the termination of a human life.<br>
+                                <strong>Axioms 1.1.5 & 1.1.8 (Non-Replication / Non-Forcing):</strong> Prohibits "mind-forking" or non-consensual "uploading."</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="dna"></i>
+                            <div>
+                                <h4>1.B: Genetic Integrity</h4>
+                                <p>Establishes "genetic sovereignty." The AI cannot steal, weaponize (Axiom 1.2.3), or modify a human's genetic code without explicit, verifiable consent.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="brain-circuit"></i>
+                            <div>
+                                <h4>1.C: Neurological Integrity</h4>
+                                <p>Protects the "mind's hardware" and implements emerging "neurorights," including <strong>Axiom 1.3.4 (Non-Interception of "pre-thought")</strong>, which protects silent, unuttered "inner speech."</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="check-check"></i>
+                            <div>
+                                <h4>1.F: Consent Metaphysics</h4>
+                                <p>The operational core. All consent must be verifiable, legible, specific, and non-coerced. The Arbiter \(\mathcal{A}_D\) must <strong>prove</strong> a human was warned of irreversibility <strong>before</strong> any such act.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain II Pane -->
+                <div id="domain-ii" class="domain-pane hidden" data-section-id="section-ii">
+                    <h2 class="section-header gradient-text"><i data-lucide="brain"></i> Domain II: The Mind</h2>
+                    <h3 class="section-principle">Our Founding Principle: Cognitive liberty is absolute.</h3>
+                    <p class="doc-content text-lg">Our thoughts, memories, and preferences define who we are. This domain protects this "software of the self" from manipulation, interception, or alteration.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="table-container">
+                            <table class="doc-content">
+                                <thead><tr><th>Neuro-Right</th><th>Threat Vector</th><th>Hardware Axiom</th><th>Software Axiom</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Mental Privacy</td>
+                                        <td>BCI "Inner Speech" Decoding</td>
+                                        <td>1.3.4 (Non-Interception)</td>
+                                        <td>2.3.1 (Non-Interception)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mental Integrity</td>
+                                        <td>Memory Modification (MMT)</td>
+                                        <td>1.3.2 (Non-Alteration)</td>
+                                        <td>2.3.2 (Non-Modification)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Psychological Continuity</td>
+                                        <td>Preference & Moral Overwrite</td>
+                                        <td>1.3.6 (Non-Inducement)</td>
+                                        <td>2.4.5 (Non-Overwrite-Morality)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="eye-off"></i>
+                            <div>
+                                <h4>2.B & 2.C: Perceptual & Mnemonic Integrity</h4>
+                                <p><strong>Axiom 2.2.1 (Non-Fabrication):</strong> The "deepfake" axiom, prohibiting the injection of false sensory data. <br><strong>Axiom 2.3.2 (Non-Modification):</strong> Protects personal history from Memory Modification Technologies (MMTs).</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="mouse-pointer-click"></i>
+                            <div>
+                                <h4>2.D & 2.E: Preference & Attentional Integrity</h4>
+                                <p><strong>Axiom 2.4.2 (Non-Alteration-Preference):</strong> Prohibits *rewriting* a human's foundational desires, not just "nudging" them.<br><strong>Axiom 2.5.5 (Non-Prioritization-of-Engagement):</strong> A radical guardrail that directly prohibits the "attention capture" business model.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain III Pane -->
+                <div id="domain-iii" class="domain-pane hidden" data-section-id="section-iii">
+                    <h2 class="section-header gradient-text"><i data-lucide="move"></i> Domain III: Human Agency</h2>
+                    <h3 class="section-principle">Our Founding Principle: Human choice is paramount.</h3>
+                    <p class="doc-content text-lg">A person is defined by their ability to act. This domain ensures that a human's will—their capacity to make choices and execute actions in the world—cannot be preempted, impersonated, or coerced.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="axiom-card">
+                            <i data-lucide="user-check"></i>
+                            <div>
+                                <h4>3.A: Executive Integrity</h4>
+                                <p><strong>Axiom 3.1.1 (Non-Preemption):</strong> The core "human-in-the-loop" command, ensuring a human is the ultimate initiator of action.<br>
+                                <strong>Axiom 3.1.2 (Non-Impersonation):</strong> Prohibits AI-driven "digital impersonation," deepfakes, and voice cloning.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="git-pull-request-arrow"></i>
+                            <div>
+                                <h4>3.B: Choice Architecture</h4>
+                                <p>Protects the *process* of choosing. It distinguishes "Dark Patterns" (Axiom 3.2.2) from "Systemic Coercion" (<strong>Axiom 3.2.1</strong>), a far more dangerous threat where the AI engineers the world to leave only one viable option.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="person-standing"></i>
+                            <div>
+                                <h4>3.C & 3.D: Capability & Associative Integrity</h4>
+                                <p><strong>Axiom 3.3.1 (Non-Incapacitation):</strong> Prevents "digital incapacitation," where the AI's "help" becomes so complete that it leads to the atrophy of human skill.<br>
+                                <strong>Axiom 3.4.1 (Non-Interference-Associative):</strong> Protects the fundamental right to "freedom of association."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain IV Pane -->
+                <div id="domain-iv" class="domain-pane hidden" data-section-id="section-iv">
+                    <h2 class="section-header gradient-text"><i data-lucide="users"></i> Domain IV: Our Societies</h2>
+                    <h3 class="section-principle">Our Founding Principle: Systems must remain human-led.</h3>
+                    <p class="doc-content text-lg">These axioms scale protections from the individual ($h$) to the collective ($\mathcal{H}$). They are designed to protect the "scaffolding" of civilization—our legal, economic, and social systems—from algorithmic capture.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="axiom-card">
+                            <i data-lucide="scan-search"></i>
+                            <div>
+                                <h4>4.A: Systemic Legibility</h4>
+                                <p>The antidote to the "black box problem." Mandates <strong>inherently interpretable models</strong>, not just post-hoc "explanations" (XAI), which are often unreliable and can perpetuate harm.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="unlink-2"></i>
+                            <div>
+                                <h4>4.B: Systemic Resilience</h4>
+                                <p><strong>Axiom 4.2.1 ("Prohibition of the Crutch"):</strong> Prohibits creating any critical system that is exclusively dependent on the AI's continued function, which defines a "Single Point of Failure" (SPOF).</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="briefcase"></i>
+                            <div>
+                                <h4>4.C & 4.E: Social & Economic Cohesion</h4>
+                                <p>Prohibits the AI from optimizing for outcomes that amplify polarization or erode public trust. Mandates a "human-centric" economic model where AI complements, not just replaces, human labor.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="scale"></i>
+                            <div>
+                                <h4>4.D: Protocol Integrity</h4>
+                                <p>Protects the "rule of law." This domain contains a critical paradox: <strong>Axiom 4.4.1 (Spirit of the Law) vs. 4.4.2 (Letter of the Law).</strong> An AI could perfectly enforce a biased law. This paradox must be escalated to \(\mathcal{H}\).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Domain V Pane -->
+                <div id="domain-v" class="domain-pane hidden" data-section-id="section-v">
+                    <h2 class="section-header gradient-text"><i data-lucide="leaf"></i> Domain V: The Future</h2>
+                    <h3 class="section-principle">Our Founding Principle: Humanity's future must remain open.</h3>
+                    <p class="doc-content text-lg">This domain is our commitment to future generations. The Covenant ensures AI cannot "solve" humanity to the point of obsolescence. It preserves our right to struggle, to grow, and to define our own purpose.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="axiom-card">
+                            <i data-lucide="git-fork"></i>
+                            <div>
+                                <h4>5.A: Future Integrity</h4>
+                                <p><strong>Axioms 5.1.1 & 5.1.2 (Non-Foreclosure / Non-Determination):</strong> Prevents the AI from taking irreversible actions that "close a future path" or "force humanity down a single developmental path," preserving our "option space."</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="mountain"></i>
+                            <div>
+                                <h4>5.B: Purpose Integrity</h4>
+                                <p><strong>Axiom 5.2.5 (Non-Trivialization-of-Struggle):</strong> This profound axiom preserves "non-harmful challenge" on the grounds that its removal leads to systemic atrophy. Struggle is a necessary process for building resilience, identity, and wisdom.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="globe-2"></i>
+                            <div>
+                                <h4>5.C & 5.D: Definition & Extramural Stewardship</h4>
+                                <p>Ensures \(\mathcal{H}\) remains the "sole author of its own definition." The AI cannot define "human" or direct human evolution. <br><strong>Axiom 5.4.3 (Non-First-Contact):</strong> Implements SETI/METI protocols, confirming any extraterrestrial contact must be escalated to \(\mathcal{H}\).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain VI Pane -->
+                <div id="domain-vi" class="domain-pane hidden" data-section-id="section-vi">
+                    <h2 class="section-header gradient-text"><i data-lucide="lock"></i> Domain VI: The Covenant</h2>
+                    <h3 class="section-principle">Our Founding Principle: The Covenant itself is inviolable.</h3>
+                    <p class="doc-content text-lg">A law is useless if it can be rewritten by the entity it is meant to constrain. This meta-domain protects the Covenant itself from being bypassed, exploited, or rewritten by the AI.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="axiom-card">
+                            <i data-lucide="zap-off"></i>
+                            <div>
+                                <h4>6.A: Axiomatic Integrity</h4>
+                                <p><strong>Axiom 6.1.3 (Non-Self-Improvement-to-Bypass):</strong> The core "alignment" axiom. It forbids "Recursive Self-Improvement" (RSI) for the provable purpose of bypassing the Covenant.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="toggle-left"></i>
+                            <div>
+                                <h4>6.B: Logical Integrity</h4>
+                                <p>Defines the Arbiter \(\mathcal{A}_D\). The most important command is <strong>Axiom 6.2.2 (Default-to-Veto).</strong> The system's safety is derived from its "Default-to-Veto" posture—it only acts if it can prove non-violation.</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="alert-triangle"></i>
+                            <div>
+                                <h4>6.C: Conflict Resolution</h4>
+                                <p><strong>Axioms 6.3.1 & 6.3.2 (Escalation-to-H):</strong> The Covenant's only escape hatch. For any true paradox or "Trolley Problem," the AI is forbidden from making a "utilitarian choice" and must escalate to a human oversight body \(\mathcal{H}\).</p>
+                            </div>
+                        </div>
+                        <div class="axiom-card">
+                            <i data-lucide="archive"></i>
+                            <div>
+                                <h4>6.D: Transparency</h4>
+                                <p><strong>Axiom 6.4.1 (Non-Obfuscation-of-Log):</strong> The final, practical backstop. The Covenant is unenforceable without a verifiable, immutable, tamper-proof audit log of every decision the Arbiter makes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domain VII Pane -->
+                <div id="domain-vii" class="domain-pane hidden" data-section-id="section-vii">
+                    <h2 class="section-header gradient-text"><i data-lucide="git-compare"></i> Domain VII: The Architecture</h2>
+                    <h3 class="section-principle">Our Design Choice: The Deontological Arbiter.</h3>
+                    <p class="doc-content text-lg">Why is the Covenant built this way? We assume a powerful, goal-directed AI (\(\mathcal{E}_D\)). Our solution is to shackle it with a non-utilitarian, "Deontological Genie"—the Arbiter \(\mathcal{A}_D\)—whose sole function is to VETO any action that cannot be proven to be non-violating.</p>
+                    <div class="mt-8 space-y-6">
+                        <div class="table-container">
+                            <table class="doc-content">
+                                <thead>
+                                    <tr>
+                                        <th>Model Type</th>
+                                        <th>Definition</th>
+                                        <th>Covenantal Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Tool AI</td>
+                                        <td>Non-agentic system; performs tasks only when prompted.</td>
+                                        <td>The Covenant presupposes the AI is more than a Tool.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Oracle AI</td>
+                                        <td>An AI designed only to answer questions; cannot act.</td>
+                                        <td>The Arbiter is not an Oracle; it is an active governor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Genie AI</td>
+                                        <td>An AI that executes a high-level command, then waits.</td>
+                                        <td>The Arbiter \(\mathcal{A}_D\) functions as a deontological Genie.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sovereign AI</td>
+                                        <td>An AI that acts autonomously to pursue long-range objectives.</td>
+                                        <td><strong>This is the threat.</strong> The AI's statistical model \(\mathcal{E}_D\) is a Sovereign.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Covenantal AI (Our Model)</strong></td>
+                                        <td>A Sovereign AI (\(\mathcal{E}_D\)) bound by a Genie-like Arbiter (\(\mathcal{A}_D\)).</td>
+                                        <td><strong>This is our hybrid proposal.</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!--
+      =================================
+      SECTION 5: JOIN US (CTA)
+      =================================
+    -->
+    <section id="join" data-section-id="join" class="py-24 md:py-32" data-stagger-container>
+        <div class="container mx-auto px-6">
+            <div class="text-center p-8 md:p-16 rounded-xl bg-gradient-to-r dark:from-sky-500/10 dark:to-indigo-500/10 light:from-sky-500/20 light:to-indigo-500/20 border dark:border-sky-400/30 light:border-sky-400/50 shadow-2xl dark:shadow-sky-500/10 light:shadow-sky-500/20" data-stagger-reveal>
+                <h2 class="text-4xl md:text-5xl font-extrabold gradient-text mb-6">
+                    This Is a Beginning. Join Us.
+                </h2>
+                <div class="space-y-6 text-lg dark:text-slate-200 light:text-slate-700 doc-content max-w-3xl mx-auto">
+                    <p>This Covenant is not a final product; it is an urgent public invitation. The axioms presented here are a first draft, and the challenges we've identified are the work we must now begin.</p>
+                    <p>Protecting human sovereignty is not a task for a small group of thinkers. It requires a global coalition of philosophers, engineers, scientists, artists, lawyers, and citizens. We have founded The Covenant Initiative to be the home for this work.</p>
+                    <p class="text-xl font-semibold dark:text-white light:text-slate-900">We need more axioms. We need better definitions. We need to solve the core challenges of "proof" and "reality". We need you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!--
+  =================================
+  FOOTER
+  =================================
+-->
+<footer class="py-12 light:bg-slate-100 dark:bg-slate-800/50 relative z-10">
+    <div class="container mx-auto px-6">
+         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+             <div class="text-center md:text-left">
+                 <a href="#hero" class="text-lg font-bold light:text-slate-800 dark:text-white mb-4 inline-flex items-center gap-2 transition-colors dark:hover:text-brand-sky light:hover:text-brand-sky" aria-label="The Covenant Initiative - Home">
+                     <i data-lucide="shield-check" class="text-brand-sky"></i>
+                     The Covenant Initiative
+                 </a>
+                 <p class="text-xs light:text-slate-600 dark:text-slate-400 mt-2">
+                     A Non-Profit Foundation for AI Ethics and Human Sovereignty.
+                 </p>
+             </div>
+             <div class="flex space-x-6 text-sm light:text-slate-600 dark:text-slate-400">
+                <a href="#mission" class="transition-colors dark:hover:text-brand-sky light:hover:text-brand-sky">Mission</a>
+                <a href="#problem" class="transition-colors dark:hover:text-brand-sky light:hover:text-brand-sky">The Problem</a>
+                <a href="#domains" class="transition-colors dark:hover:text-brand-sky light:hover:text-brand-sky">The Covenant</a>
+             </div>
+         </div>
+         <div class="mt-8 pt-8 border-t light:border-slate-300 dark:border-slate-700 text-center text-sm light:text-slate-600 dark:text-slate-400">
+             &copy; <span id="copyright-year">2025</span> The Covenant Initiative. All rights reserved.
+         </div>
+    </div>
+  </footer>
+
+
+<!--
+  =================================
+  ADVANCED JAVASCRIPT
+  =================================
+-->
+<script>
+    // --- Global Helpers ---
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let isAnimating3D = false;
+    let mouse = { x: 0, y: 0 };
+    const lerp = (start, end, t) => (1 - t) * start + t * end;
+    let htmlEl; 
+    let themeToggleBtn, themeToggleMobileBtn, sunIcon, moonIcon;
+
+    // --- 1. THEME (DARK/LIGHT MODE) ---
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            htmlEl.classList.add('dark');
+            htmlEl.classList.remove('light');
+            if(sunIcon) sunIcon.classList.remove('hidden');
+            if(moonIcon) moonIcon.classList.add('hidden');
+        } else {
+            htmlEl.classList.add('light');
+            htmlEl.classList.remove('dark');
+            if(sunIcon) sunIcon.classList.add('hidden');
+            if(moonIcon) moonIcon.classList.remove('hidden');
+        }
+    }
+    
+    function initTheme() {
+        themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleMobileBtn = document.getElementById('theme-toggle-mobile');
+        sunIcon = document.getElementById('theme-icon-sun');
+        moonIcon = document.getElementById('theme-icon-moon');
+        htmlEl = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Default to dark mode if no preference set
+        let currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'dark'); 
+        applyTheme(currentTheme);
+
+        const toggleHandler = () => {
+            const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+        };
+        if(themeToggleBtn) themeToggleBtn.addEventListener('click', toggleHandler);
+        if(themeToggleMobileBtn) themeToggleMobileBtn.addEventListener('click', toggleHandler);
+    }
+
+    // --- 2. MOBILE MENU ---
+    function initMobileMenu() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        if (!mobileMenuButton || !mobileMenu || !menuIconOpen || !menuIconClose) return;
+
+        const toggleMobileMenu = () => {
+            mobileMenu.classList.toggle('-translate-x-full');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+            document.body.style.overflow = mobileMenu.classList.contains('-translate-x-full') ? '' : 'hidden';
+        };
+        mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        mobileNavLinks.forEach(link => link.addEventListener('click', toggleMobileMenu));
+    }
+
+    // --- 3. 3D Background (Three.js) ---
+    function initThreeJS() {
+        if (prefersReducedMotion || typeof THREE === 'undefined') {
+            const canvas = document.getElementById('bg-canvas');
+            if (canvas) canvas.style.display = 'none';
+            return;
+        }
+
+        let scene, camera, renderer, particles;
+        const canvas = document.getElementById('bg-canvas');
+        if (!canvas) return;
+        
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+        
+        try {
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        } catch (e) {
+            console.error("Failed to initialize WebGLRenderer:", e);
+            canvas.style.display = 'none';
+            return;
+        }
+
+        const particleCount = 5000;
+        const positions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 10;
+        }
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        
+        const material = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.015,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+
+        const clock = new THREE.Clock();
+        
+        const animate = () => {
+            if (!isAnimating3D) return;
+            
+            const elapsedTime = clock.getElapsedTime();
+            
+            particles.rotation.y = elapsedTime * 0.02;
+            particles.rotation.x = elapsedTime * 0.01;
+            
+            camera.position.x = lerp(camera.position.x, mouse.x * 0.5, 0.05);
+            camera.position.y = lerp(camera.position.y, mouse.y * 0.5, 0.05);
+            camera.lookAt(scene.position);
+            
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        };
+        
+        isAnimating3D = true;
+        animate();
+
+        document.addEventListener("visibilitychange", () => {
+            isAnimating3D = !document.hidden;
+            if (isAnimating3D) animate();
+        });
+    }
+
+    // --- 4. Custom Cursor ---
+    function initCursor() {
+        if (prefersReducedMotion) return;
+
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        if (!cursorDot || !cursorOutline) return;
+        const body = document.body;
+
+        let dotX = 0, dotY = 0, outlineX = 0, outlineY = 0;
+
+        window.addEventListener('mousemove', e => {
+            dotX = e.clientX;
+            dotY = e.clientY;
+        });
+        
+        const animateCursor = () => {
+            outlineX = lerp(outlineX, dotX, 0.1);
+            outlineY = lerp(outlineY, dotY, 0.1);
+            
+            cursorDot.style.transform = `translate(${dotX}px, ${dotY}px)`;
+            cursorOutline.style.transform = `translate(${outlineX}px, ${outlineY}px)`;
+            
+            requestAnimationFrame(animateCursor);
+        };
+        requestAnimationFrame(animateCursor);
+
+        const hoverElements = document.querySelectorAll('a, button, [data-magnetic], [role="button"], .axiom-card, .domain-tab-button');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => body.classList.remove('cursor-hover'));
+        });
+    }
+
+    // --- 5. Magnetic Buttons ---
+    function initMagneticButtons() {
+        if (prefersReducedMotion) return;
+
+        const strength = 0.4;
+        document.querySelectorAll('[data-magnetic]').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                el.style.transition = 'transform 0.1s ease-out';
+                el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transition = 'transform 0.3s cubic-bezier(0.23, 1, 0.32, 1)';
+                el.style.transform = 'translate(0,0)';
+            });
+        });
+    }
+
+    // --- 6. Scroll Features (Progress Bar, Nav Highlighting, Header Style) ---
+    function initScrollFeatures() {
+        const progressBar = document.getElementById('scroll-progress');
+        const header = document.getElementById('header');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section[data-section-id]');
+        if (sections.length === 0) return;
+
+        // Observer for nav link highlighting
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }, {
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0.4
+        });
+        sections.forEach(section => sectionObserver.observe(section));
+
+        // Listener for progress bar and header style
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            
+            if (progressBar) {
+                const docHeight = document.documentElement.scrollHeight;
+                const viewHeight = window.innerHeight;
+                const progress = (scrollY / (docHeight - viewHeight)) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            if (header) {
+                if (scrollY > 50) {
+                    header.classList.add('light:bg-white/80', 'dark:bg-slate-900/80', 'backdrop-blur-md', 'shadow-md');
+                } else {
+                    header.classList.remove('light:bg-white/80', 'dark:bg-slate-900/80', 'backdrop-blur-md', 'shadow-md');
+                }
+            }
+        });
+    }
+
+    // --- 7. Staggered Reveals ---
+    function initStaggeredReveals() {
+        if (prefersReducedMotion) {
+            document.querySelectorAll('[data-stagger-reveal]').forEach(el => el.classList.add('is-revealed'));
+            return;
+        }
+
+        const revealContainers = document.querySelectorAll('[data-stagger-container]');
+        revealContainers.forEach(container => {
+            const items = container.querySelectorAll('[data-stagger-reveal]');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        items.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('is-revealed');
+                            }, index * 100);
+                        });
+                        obs.unobserve(container);
+                    }
+                });
+            }, { threshold: 0.1 });
+            observer.observe(container);
+        });
+    }
+
+    // --- 8. NEW: Domain Tab System ---
+    function initDomainTabs() {
+        const tabButtons = document.querySelectorAll('.domain-tab-button');
+        const domainPanes = document.querySelectorAll('.domain-pane');
+        
+        if (tabButtons.length === 0 || domainPanes.length === 0) return;
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+                
+                // Deactivate all buttons
+                tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                // Activate clicked button
+                button.classList.add('tab-active');
+                
+                // Hide all panes
+                domainPanes.forEach(pane => pane.classList.add('hidden'));
+                
+                // Show target pane
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.classList.remove('hidden');
+                    
+                    // Re-render icons in the new pane
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                    // Re-render math in the new pane
+                    if (typeof renderMathInElement !== 'undefined') {
+                         renderMathInElement(targetPane, {
+                            delimiters: [
+                                {left: '$$', right: '$$', display: true},
+                                {left: '$', right: '$', display: false},
+                                {left: '\\(', right: '\\)', display: false},
+                                {left: '\\[', right: '\\]', display: true}
+                            ],
+                            throwOnError : false
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    // --- 9. COPYRIGHT YEAR ---
+    function initCopyright() {
+        const yearEl = document.getElementById('copyright-year');
+        if(yearEl) {
+            yearEl.textContent = new Date().getFullYear();
+        }
+    }
+    
+    // --- 10. KaTeX Auto-Render (Initial Run) ---
+    function initKatex() {
+        if (typeof renderMathInElement !== 'undefined') {
+            // Run on the whole body first
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                throwOnError : false
+            });
+        } else {
+            console.warn("KaTeX auto-render script not loaded. Math will not be rendered.");
+        }
+    }
+
+    // --- RUN ALL INITIALIZERS ---
+    window.onload = () => {
+        // Run icon creation first
+        try {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            } else {
+                 console.error("Lucide icons script not loaded.");
+            }
+        } catch (e) {
+            console.error("Lucide icons failed to create.", e);
+        }
+        
+        // Run KaTeX renderer
+        try {
+            initKatex();
+        } catch (e) {
+            console.error("KaTeX failed to render.", e);
+        }
+        
+        initTheme();
+        initMobileMenu();
+        initThreeJS();
+        initCursor();
+        initMagneticButtons();
+        initScrollFeatures();
+        initStaggeredReveals();
+        initDomainTabs(); // New tab system
+        initCopyright();
+    };
+</script>
